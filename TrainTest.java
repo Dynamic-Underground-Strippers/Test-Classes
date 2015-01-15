@@ -67,7 +67,6 @@ public class TrainTest extends TestCase {
         Train myTrain = new Train();
         int expected = 15;
         assertEquals(expected, myTrain.getSpeed());
-
         myTrain.setSpeed(150);
         expected = 150;
         assertEquals(expected, myTrain.getSpeed());

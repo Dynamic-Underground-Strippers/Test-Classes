@@ -22,9 +22,10 @@ public class RouteTest extends TestCase {
     public ArrayList<Node> listOfNodes;
 
     public ArrayList<Node> createList(){
-        ArrayList<Node> arr = null;
+        ArrayList<Node> arr = new ArrayList<Node>();
 
-        ArrayList<Node> a = null;
+        ArrayList<Node> a;
+
         arr.add(0,map.retrieveNode(1));
         a = map.findAdjacentNodes(arr.get(0));
         arr.add(1,a.get(0));
@@ -40,7 +41,7 @@ public class RouteTest extends TestCase {
     }
 
     @Test
-    public void testTrain() throws Exception {
+    public void testRoute() throws Exception {
         Route route = new Route(createList());
         route.setTrain(new Train());
         assertEquals(route.getDistanceAlongConnection(), 0);
@@ -53,7 +54,7 @@ public class RouteTest extends TestCase {
         route.setTrain(new Train());
         int distance = map.findDistance(route.listOfNodes.get(route.getCurrentNode()), route.listOfNodes.get(route.getCurrentNode()+1));
         route.updateDistanceAlongConnection();
-        assertEquals(route.getDistanceAlongConnection(), (distance - 15/60));
+        assertEquals(route.getDistanceAlongConnection(), (15/60));
     }
 
     @Test
@@ -91,9 +92,18 @@ public class RouteTest extends TestCase {
         route.setTrain(new Train());
         int distance = map.findDistance(route.listOfNodes.get(route.getCurrentNode()), route.listOfNodes.get(route.getCurrentNode()+1));
         distance = distance + map.findDistance(route.listOfNodes.get(route.getCurrentNode()+1), route.listOfNodes.get(route.getCurrentNode()+2));
-        distance = distance + map.findDistance(route.listOfNodes.get(route.getCurrentNode()+1), route.listOfNodes.get(route.getCurrentNode()+2));
         route.updateDistanceAlongConnection(distance + 1);
         assertEquals(route.getDistanceAlongConnection(), 1);
         assertEquals(route.getCurrentNode(),2);
+    }
+
+    public void test2NodeDistanceMinus1() throws Exception {
+        Route route = new Route(createList());
+        route.setTrain(new Train());
+        int distance = map.findDistance(route.listOfNodes.get(route.getCurrentNode()), route.listOfNodes.get(route.getCurrentNode()+1));
+        distance = distance + map.findDistance(route.listOfNodes.get(route.getCurrentNode()+1), route.listOfNodes.get(route.getCurrentNode()+2));
+        route.updateDistanceAlongConnection(distance - 1);
+        assertEquals(route.getDistanceAlongConnection(), map.findDistance(route.listOfNodes.get(route.getCurrentNode()+1), route.listOfNodes.get(route.getCurrentNode()+2))-1);
+        assertEquals(route.getCurrentNode(),1);
     }
 }
